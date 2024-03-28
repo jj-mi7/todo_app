@@ -12,24 +12,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CompletedViewModel @Inject constructor(
-    private  val repo: TodoRepo
-): ViewModel()
-{
-    fun CompleteTodo(term:String):LiveData<List<Todo>>
-    {
+    private val repo: TodoRepo
+) : ViewModel() {
+    fun completeTodo(term: String): LiveData<List<Todo>> {
         return repo.completeTodo(term)
     }
 
-    fun dltTodo(todo: Todo)
-    {
+    fun dltTodo(todo: Todo) {
         viewModelScope.launch(Dispatchers.IO)
         {
             repo.dltTodo(todo)
         }
     }
 
-    fun addTodo(todo: Todo)
-    {
+    fun addTodo(todo: Todo) {
         viewModelScope.launch(Dispatchers.IO)
         {
             repo.addTodo(todo)

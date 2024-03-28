@@ -9,28 +9,34 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.ui.graphics.vector.ImageVector
 
-data  class NavBarClass(
-    val route:String,
-    val title:String,
-    val sicon: ImageVector,
-    val usicon: ImageVector
-    )
+data class NavBarClass(
+    val route: String,
+    val title: String,
+    val selectedIcon: ImageVector,
+    val unselectedIcon: ImageVector
+)
 
-val items= listOf(
+val items = listOf(
 
-    NavBarClass(route="home",
+    NavBarClass(
+        route = "home",
         title = "Home",
-        sicon = Icons.Filled.Home,
-        usicon = Icons.Outlined.Home),
+        selectedIcon = Icons.Filled.Home,
+        unselectedIcon = Icons.Outlined.Home
+    ),
 
-    NavBarClass(route="completed",
+    NavBarClass(
+        route = "completed",
         title = "Completed",
-        sicon = Icons.Filled.Done,
-        usicon = Icons.Outlined.Done),
+        selectedIcon = Icons.Filled.Done,
+        unselectedIcon = Icons.Outlined.Done
+    ),
 
-    NavBarClass(route="category",
+    NavBarClass(
+        route = "category",
         title = "Category",
-        sicon = Icons.Filled.List,
-        usicon = Icons.Outlined.List),
+        selectedIcon = Icons.Filled.List,
+        unselectedIcon = Icons.Outlined.List
+    ),
 )
 

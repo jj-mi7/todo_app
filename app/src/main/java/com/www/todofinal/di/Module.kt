@@ -9,14 +9,14 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+
 @Module
 @InstallIn(SingletonComponent::class)
 object Module {
 
     @Provides
     @Singleton
-    fun giveTodoDb(app:Application):TodoDatabase
-    {
+    fun giveTodoDb(app: Application): TodoDatabase {
         return Room.databaseBuilder(
             app,
             TodoDatabase::class.java,
@@ -26,7 +26,7 @@ object Module {
 
     @Provides
     @Singleton
-    fun makeRepo(db:TodoDatabase):TodoRepo{
+    fun makeRepo(db: TodoDatabase): TodoRepo {
         return TodoRepo(db.todoDao())
     }
 }

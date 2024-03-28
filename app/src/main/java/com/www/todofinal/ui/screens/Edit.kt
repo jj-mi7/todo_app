@@ -83,265 +83,265 @@ import kotlin.random.Random
 @Composable
 fun Edit(navController: NavHostController, x: MainActivity) {
 
-        val viewModel2 = ViewModelProvider(x)[EditViewModel::class.java]
+    val viewModel2 = ViewModelProvider(x)[EditViewModel::class.java]
 
-        var sliderPosition by remember { mutableFloatStateOf(0f) }
+    var sliderPosition by remember { mutableFloatStateOf(0f) }
 
-        val context = LocalContext.current
+    val context = LocalContext.current
 
-        var note by rememberSaveable {
-            mutableStateOf(intentData)
-        }
+    var note by rememberSaveable {
+        mutableStateOf(intentData)
+    }
 
-        intentData=""
+    intentData=""
 
-        var title by rememberSaveable {
-            mutableStateOf("")
-        }
+    var title by rememberSaveable {
+        mutableStateOf("")
+    }
 
-        var date by rememberSaveable {
-            mutableStateOf("")
-        }
+    var date by rememberSaveable {
+        mutableStateOf("")
+    }
 
-        val state = rememberDatePickerState()
+    val state = rememberDatePickerState()
 
-        val openDialog = rememberSaveable { mutableStateOf(false) }
+    val openDialog = rememberSaveable { mutableStateOf(false) }
 
-        val itemsPriority = listOf("Work", "Personal")
+    val itemsPriority = listOf("Work", "Personal")
 
-        var selectedItemPriority by rememberSaveable { mutableStateOf(itemsPriority[0]) }
+    var selectedItemPriority by rememberSaveable { mutableStateOf(itemsPriority[0]) }
 
-        var expandedPriority by rememberSaveable { mutableStateOf(false) }
+    var expandedPriority by rememberSaveable { mutableStateOf(false) }
 
-        var category by rememberSaveable {
-            mutableStateOf(itemsPriority[0])
-        }
+    var category by rememberSaveable {
+        mutableStateOf(itemsPriority[0])
+    }
 
-        val items = listOf("High ", "Medium", "Low")
+    val items = listOf("High ", "Medium", "Low")
 
-        var selectedItem by rememberSaveable { mutableStateOf(items[0]) }
+    var selectedItem by rememberSaveable { mutableStateOf(items[0]) }
 
-        var expanded by rememberSaveable { mutableStateOf(false) }
+    var expanded by rememberSaveable { mutableStateOf(false) }
 
-        var priorityColor: Int = Color.Red.toArgb()
+    var priorityColor: Int = Color.Red.toArgb()
 
-        Scaffold(
-            topBar = {
-                CenterAlignedTopAppBar(
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        titleContentColor = MaterialTheme.colorScheme.primary,
-                    ),
-                    title = {
-                        Text(
-                            "Add Todo",
-                            maxLines = 1,
-                            fontWeight = FontWeight(800),
-                            fontStyle = FontStyle.Italic,
-                            overflow = TextOverflow.Ellipsis
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                ),
+                title = {
+                    Text(
+                        "Add Todo",
+                        maxLines = 1,
+                        fontWeight = FontWeight(800),
+                        fontStyle = FontStyle.Italic,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "back"
                         )
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "back"
-                            )
-                        }
                     }
-                )
-            }
+                }
+            )
+        }
+    )
+    {
+        it
+
+        Card(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it),
+            shape = MaterialTheme.shapes.medium,
+            elevation = CardDefaults.cardElevation(20.dp)
         )
         {
-            it
-
-            Card(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(it),
-                shape = MaterialTheme.shapes.medium,
-                elevation = CardDefaults.cardElevation(20.dp)
-            )
+            Column(modifier = Modifier.verticalScroll(rememberScrollState()))
             {
-                Column(modifier = Modifier.verticalScroll(rememberScrollState()))
+                OutlinedTextField(
+                    shape = RoundedCornerShape(20.dp),
+                    value = title,
+                    onValueChange = { title = it },
+                    label = { Text(text = "Title") },
+                    modifier = Modifier
+                        .padding(start = 10.dp, top = 25.dp, end = 10.dp, bottom = 10.dp)
+                        .wrapContentSize()
+                        .fillMaxWidth(),
+                    textStyle = TextStyle(fontStyle = FontStyle.Italic, fontSize = 20.sp)
+                )
+
+                OutlinedTextField(
+                    modifier = Modifier
+                        .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 10.dp)
+                        .wrapContentSize()
+                        .fillMaxWidth(),
+                    value = note,
+                    onValueChange = { note = it },
+                    label = { Text(text = "Enter Description") },
+                    shape = RoundedCornerShape(20.dp),
+                )
+
+                Button(
+                    onClick = { openDialog.value = true },
+                    modifier = Modifier.padding( 10.dp)
+                )
                 {
-                    OutlinedTextField(
-                        shape = RoundedCornerShape(20.dp),
-                        value = title,
-                        onValueChange = { title = it },
-                        label = { Text(text = "Title") },
-                        modifier = Modifier
-                            .padding(start = 10.dp, top = 25.dp, end = 10.dp, bottom = 10.dp)
-                            .wrapContentSize()
-                            .fillMaxWidth(),
-                        textStyle = TextStyle(fontStyle = FontStyle.Italic, fontSize = 20.sp)
-                    )
-
-                    OutlinedTextField(
-                        modifier = Modifier
-                            .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 10.dp)
-                            .wrapContentSize()
-                            .fillMaxWidth(),
-                        value = note,
-                        onValueChange = { note = it },
-                        label = { Text(text = "Enter Description") },
-                        shape = RoundedCornerShape(20.dp),
-                    )
-
-                    Button(
-                        onClick = { openDialog.value = true },
-                        modifier = Modifier.padding( 10.dp)
-                    )
-                    {
-                        Text(text = "Pick Due Date")
-                    }
-                    if (openDialog.value) {
-                        DatePickerDialog(onDismissRequest = {
-                            openDialog.value = false
-                        },
-                            confirmButton = {
-                                TextButton(onClick = {
-                                    openDialog.value = false
-                                }
-                                )
-                                {
-                                    Text("OK")
-                                }
-                            },
-                            dismissButton = {
-                                TextButton(onClick = {
-                                    openDialog.value = false
-                                }
-                                )
-                                {
-                                    Text("CANCEL")
-                                }
+                    Text(text = "Pick Due Date")
+                }
+                if (openDialog.value) {
+                    DatePickerDialog(onDismissRequest = {
+                        openDialog.value = false
+                    },
+                        confirmButton = {
+                            TextButton(onClick = {
+                                openDialog.value = false
                             }
-                        )
-                        {
-                            DatePicker(
-                                state = state
                             )
-                        }
-                    }
-
-                    date = millisToDate(state.selectedDateMillis ?: 0L)
-
-                    if (date == "01-01-1970") {
-                        date = ""
-                    }
-
-
-
-                    Column(
-                        modifier = Modifier.padding(10.dp)
-                    )
-                    {
-                        OutlinedButton(onClick = { expandedPriority = true }
-                        )
-                        {
-                            Text("Category : ${selectedItemPriority}")
-                        }
-                        DropdownMenu(modifier = Modifier.background(
-                            color = Color.White, shape = RectangleShape
-                        ),
-                            expanded = expandedPriority,
-                            onDismissRequest = { expandedPriority = false }) {
-                            itemsPriority.forEach { item ->
-                                DropdownMenuItem(text = { Text(text = item) }, onClick = {
-                                    selectedItemPriority = item
-                                    category = item
-                                    expandedPriority = false
-                                }
-                                )
+                            {
+                                Text("OK")
+                            }
+                        },
+                        dismissButton = {
+                            TextButton(onClick = {
+                                openDialog.value = false
+                            }
+                            )
+                            {
+                                Text("CANCEL")
                             }
                         }
-                    }
-
-                    Column(
-                        modifier = Modifier.padding(10.dp)
                     )
                     {
-                        OutlinedButton(onClick = { expanded = true }
-                        )
-                        {
-                            Text("Priority : ${selectedItem}")
-                        }
-                        DropdownMenu(modifier = Modifier.background(
-                            color = Color.White, shape = RectangleShape
-                        ),
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false }) {
-                            items.forEach { item ->
-                                DropdownMenuItem(text = { Text(text = item) }, onClick = {
-                                    selectedItem = item
-                                    priorityColor = when (selectedItem) {
-                                        items[0] -> Color.Red.toArgb()
-                                        items[1] -> Color.Yellow.toArgb()
-                                        items[2] -> Color.Green.toArgb()
-                                        else -> {
-                                            Color.Red.toArgb()
-                                        }
-                                    }
-                                    expanded = false
-                                }
-                                )
-                            }
-                        }
-                    }
-                    Column {
-                        Text(text = "Progression: ${sliderPosition.toInt()}",
-                            fontWeight = FontWeight(700),
-                            modifier = Modifier.padding(start=15.dp,10.dp),
-                            fontFamily = FontFamily.Monospace)
-
-                        Slider(modifier = Modifier.padding(5.dp).scale(.80f),
-                            value = sliderPosition,
-                            onValueChange = { sliderPosition = it },
-                            steps = 100,
-                            colors = SliderDefaults.colors(
-                                thumbColor = MaterialTheme.colorScheme.primary,
-                                activeTrackColor = MaterialTheme.colorScheme.secondary,
-                                inactiveTrackColor = MaterialTheme.colorScheme.secondaryContainer,
-                            ),
-                            valueRange = 0f..100f
+                        DatePicker(
+                            state = state
                         )
                     }
                 }
 
-                ExtendedFloatingActionButton(modifier = Modifier
-                    .padding(start = 230.dp, top = 20.dp, bottom = 20.dp),
-                    text = { Text(text = "Save") },
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Default.AddCircle,
-                            contentDescription = "saveicon"
-                        )
-                    },
-                    onClick = {
-                        if (title.isNotBlank() and note.isNotBlank() and date.isNotBlank()) {
-                            viewModel2.addTodo(
-                                Todo(
-                                    title = title,
-                                    note = note,
-                                    done = false,
-                                    dateTime = date,
-                                    color = generateRandomLightColor(),
-                                    category = category,
-                                    progress = sliderPosition,
-                                    priority = priorityColor
-                                )
+                date = millisToDate(state.selectedDateMillis ?: 0L)
+
+                if (date == "01-01-1970") {
+                    date = ""
+                }
+
+
+
+                Column(
+                    modifier = Modifier.padding(10.dp)
+                )
+                {
+                    OutlinedButton(onClick = { expandedPriority = true }
+                    )
+                    {
+                        Text("Category : ${selectedItemPriority}")
+                    }
+                    DropdownMenu(modifier = Modifier.background(
+                        color = Color.White, shape = RectangleShape
+                    ),
+                        expanded = expandedPriority,
+                        onDismissRequest = { expandedPriority = false }) {
+                        itemsPriority.forEach { item ->
+                            DropdownMenuItem(text = { Text(text = item) }, onClick = {
+                                selectedItemPriority = item
+                                category = item
+                                expandedPriority = false
+                            }
                             )
-                            Toast.makeText(context, "Created Todo", Toast.LENGTH_SHORT).show()
-                            navController.popBackStack()
-                        }
-                        if (title.isBlank() or note.isBlank() or date.isBlank()) {
-                            Toast.makeText(context, "Enter all fields", Toast.LENGTH_SHORT).show()
                         }
                     }
+                }
+
+                Column(
+                    modifier = Modifier.padding(10.dp)
                 )
+                {
+                    OutlinedButton(onClick = { expanded = true }
+                    )
+                    {
+                        Text("Priority : ${selectedItem}")
+                    }
+                    DropdownMenu(modifier = Modifier.background(
+                        color = Color.White, shape = RectangleShape
+                    ),
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false }) {
+                        items.forEach { item ->
+                            DropdownMenuItem(text = { Text(text = item) }, onClick = {
+                                selectedItem = item
+                                priorityColor = when (selectedItem) {
+                                    items[0] -> Color.Red.toArgb()
+                                    items[1] -> Color.Yellow.toArgb()
+                                    items[2] -> Color.Green.toArgb()
+                                    else -> {
+                                        Color.Red.toArgb()
+                                    }
+                                }
+                                expanded = false
+                            }
+                            )
+                        }
+                    }
+                }
+                Column {
+                    Text(text = "Progression: ${sliderPosition.toInt()}",
+                        fontWeight = FontWeight(700),
+                        modifier = Modifier.padding(start=15.dp,10.dp),
+                        fontFamily = FontFamily.Monospace)
+
+                    Slider(modifier = Modifier.padding(5.dp).scale(.80f),
+                        value = sliderPosition,
+                        onValueChange = { sliderPosition = it },
+                        steps = 100,
+                        colors = SliderDefaults.colors(
+                            thumbColor = MaterialTheme.colorScheme.primary,
+                            activeTrackColor = MaterialTheme.colorScheme.secondary,
+                            inactiveTrackColor = MaterialTheme.colorScheme.secondaryContainer,
+                        ),
+                        valueRange = 0f..100f
+                    )
+                }
             }
+
+            ExtendedFloatingActionButton(modifier = Modifier
+                .padding(start = 230.dp, top = 20.dp, bottom = 20.dp),
+                text = { Text(text = "Save") },
+                icon = {
+                    Icon(
+                        imageVector = Icons.Default.AddCircle,
+                        contentDescription = "saveicon"
+                    )
+                },
+                onClick = {
+                    if (title.isNotBlank() and note.isNotBlank() and date.isNotBlank()) {
+                        viewModel2.addTodo(
+                            Todo(
+                                title = title,
+                                note = note,
+                                done = false,
+                                dateTime = date,
+                                color = generateRandomLightColor(),
+                                category = category,
+                                progress = sliderPosition,
+                                priority = priorityColor
+                            )
+                        )
+                        Toast.makeText(context, "Created Todo", Toast.LENGTH_SHORT).show()
+                        navController.popBackStack()
+                    }
+                    if (title.isBlank() or note.isBlank() or date.isBlank()) {
+                        Toast.makeText(context, "Enter all fields", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            )
         }
+    }
 
 }
 

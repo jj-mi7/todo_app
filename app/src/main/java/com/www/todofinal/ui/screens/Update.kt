@@ -13,7 +13,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -65,10 +64,9 @@ import com.www.todofinal.viewModel.UpdateViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UpdateScreen(navController: NavHostController, x: MainActivity)
-{
-    val viewModel4= ViewModelProvider(x)[UpdateViewModel::class.java]
-    Log.d("joel","logUpdate")
+fun UpdateScreen(navController: NavHostController, x: MainActivity) {
+    val viewModel4 = ViewModelProvider(x)[UpdateViewModel::class.java]
+    Log.d("joel", "logUpdate")
 
     var sliderPosition by remember { mutableFloatStateOf(todoBuffer.progress) }
 
@@ -106,18 +104,19 @@ fun UpdateScreen(navController: NavHostController, x: MainActivity)
 
     val items = listOf("High", "Medium", "Low")
 
-    var selectedItem by rememberSaveable { mutableStateOf(
-        when(Color(todoBuffer.priority)){
-            Color.Red->"High"
-            Color.Yellow->"Medium"
-            Color.Green->"Low"
-            else->""
-        }
-    )
-        }
+    var selectedItem by rememberSaveable {
+        mutableStateOf(
+            when (Color(todoBuffer.priority)) {
+                Color.Red -> "High"
+                Color.Yellow -> "Medium"
+                Color.Green -> "Low"
+                else -> ""
+            }
+        )
+    }
     var expanded by rememberSaveable { mutableStateOf(false) }
 
-    var priorityColor:Int= todoBuffer.priority
+    var priorityColor: Int = todoBuffer.priority
 
     Scaffold(
 
@@ -151,21 +150,24 @@ fun UpdateScreen(navController: NavHostController, x: MainActivity)
             )
         }
     )
-    {it
+    {
+        it
 
-        Card(modifier = Modifier
-            .fillMaxSize()
-            .padding(it),
+        Card(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it),
             shape = MaterialTheme.shapes.medium,
-            elevation = CardDefaults.cardElevation(20.dp))
+            elevation = CardDefaults.cardElevation(20.dp)
+        )
         {
-            Column (
+            Column(
                 modifier = Modifier.verticalScroll(rememberScrollState())
             )
             {
                 OutlinedTextField(
                     shape = RoundedCornerShape(20.dp),
-                    value = title, onValueChange = {title=it},
+                    value = title, onValueChange = { title = it },
                     label = { Text(text = "Title") },
                     modifier = Modifier
                         .padding(start = 10.dp, top = 25.dp, end = 10.dp, bottom = 10.dp)
@@ -174,18 +176,20 @@ fun UpdateScreen(navController: NavHostController, x: MainActivity)
                     textStyle = TextStyle(fontStyle = FontStyle.Italic, fontSize = 20.sp)
                 )
 
-                OutlinedTextField(modifier = Modifier
-                    .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 10.dp)
-                    .wrapContentSize()
-                    .fillMaxWidth(),
+                OutlinedTextField(
+                    modifier = Modifier
+                        .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 10.dp)
+                        .wrapContentSize()
+                        .fillMaxWidth(),
                     value = note,
-                    onValueChange ={note=it},
-                    label ={ Text(text = "Enter Description") }
-                    ,shape = RoundedCornerShape(20.dp),
-                    )
+                    onValueChange = { note = it },
+                    label = { Text(text = "Enter Description") }, shape = RoundedCornerShape(20.dp),
+                )
 
-                Button(onClick = { openDialog.value=true },
-                    modifier = Modifier.padding(10.dp)) {
+                Button(
+                    onClick = { openDialog.value = true },
+                    modifier = Modifier.padding(10.dp)
+                ) {
                     Text(text = "Pick Due Date")
                 }
                 if (openDialog.value) {
@@ -222,32 +226,36 @@ fun UpdateScreen(navController: NavHostController, x: MainActivity)
                 }
 
 
-                date=millisToDate(state.selectedDateMillis?:0L)
-                if (date=="01-01-1970")
-                {
-                    date=todoBuffer.dateTime
+                date = millisToDate(state.selectedDateMillis ?: 0L)
+                if (date == "01-01-1970") {
+                    date = todoBuffer.dateTime
                 }
 
                 Column(
                     modifier = Modifier.padding(10.dp)
                 )
-                {OutlinedButton(
-                    onClick = { expandedPriority = true }
-
-                )
                 {
-                    Text("Category : ${selectedItemPriority}")
-                }
-                    DropdownMenu(modifier=Modifier.background(color = Color.White, shape = RectangleShape),
+                    OutlinedButton(
+                        onClick = { expandedPriority = true }
+
+
+                    )
+                    {
+                        Text("Category : ${selectedItemPriority}")
+                    }
+                    DropdownMenu(modifier = Modifier.background(
+                        color = Color.White,
+                        shape = RectangleShape
+                    ),
                         expanded = expandedPriority,
                         onDismissRequest = { expandedPriority = false }
                     )
                     {
                         itemsPriority.forEach { item ->
-                            DropdownMenuItem(text = { Text(text = item)},
+                            DropdownMenuItem(text = { Text(text = item) },
                                 onClick = {
                                     selectedItemPriority = item
-                                    category=item
+                                    category = item
                                     expandedPriority = false
                                 }
                             )
@@ -260,25 +268,27 @@ fun UpdateScreen(navController: NavHostController, x: MainActivity)
                 {
                     OutlinedButton(onClick = { expanded = true }
 
-                )
-                {
-                    Text("Priority : ${selectedItem}")
-                }
+                    )
+                    {
+                        Text("Priority : ${selectedItem}")
+                    }
                     DropdownMenu(
-                        modifier=Modifier.background(color = Color.White, shape = RectangleShape),
+                        modifier = Modifier.background(color = Color.White, shape = RectangleShape),
                         expanded = expanded,
                         onDismissRequest = { expanded = false }
                     )
                     {
                         items.forEach { item ->
-                            DropdownMenuItem(text = { Text(text = item)},
+                            DropdownMenuItem(text = { Text(text = item) },
                                 onClick = {
                                     selectedItem = item
-                                    priorityColor=when(selectedItem){
-                                        items[0]->Color.Red.toArgb()
-                                        items[1]->Color.Yellow.toArgb()
-                                        items[2]->Color.Green.toArgb()
-                                        else -> { todoBuffer.priority}
+                                    priorityColor = when (selectedItem) {
+                                        items[0] -> Color.Red.toArgb()
+                                        items[1] -> Color.Yellow.toArgb()
+                                        items[2] -> Color.Green.toArgb()
+                                        else -> {
+                                            todoBuffer.priority
+                                        }
                                     }
                                     expanded = false
                                 }
@@ -287,14 +297,18 @@ fun UpdateScreen(navController: NavHostController, x: MainActivity)
                     }
                 }
                 Column {
-                    Text(text = "Progression: ${sliderPosition.toInt()}",
-                        modifier = Modifier.padding(start=15.dp,10.dp),
+                    Text(
+                        text = "Progression: ${sliderPosition.toInt()}",
+                        modifier = Modifier.padding(start = 15.dp, 10.dp),
                         fontWeight = FontWeight(700),
 
                         fontFamily = FontFamily.Monospace
-                   )
+                    )
 
-                    Slider(modifier = Modifier.padding(5.dp).scale(.80f),
+                    Slider(
+                        modifier = Modifier
+                            .padding(5.dp)
+                            .scale(.80f),
                         value = sliderPosition,
                         onValueChange = { sliderPosition = it },
                         steps = 100,
@@ -307,20 +321,24 @@ fun UpdateScreen(navController: NavHostController, x: MainActivity)
                     )
                 }
             }
-            ExtendedFloatingActionButton(modifier = Modifier.padding(start = 200.dp, top = 20.dp,bottom=20.dp),
+            ExtendedFloatingActionButton(modifier = Modifier.padding(
+                start = 200.dp,
+                top = 20.dp,
+                bottom = 20.dp
+            ),
                 text = { Text(text = "Update") },
-                icon = { Icon(imageVector = Icons.Default.Edit, contentDescription ="saveicon" ) },
+                icon = { Icon(imageVector = Icons.Default.Edit, contentDescription = "saveicon") },
                 onClick = {
-                    if (title.isNotBlank() or note.isNotBlank() ) {
+                    if (title.isNotBlank() or note.isNotBlank()) {
                         viewModel4.addTodo(
                             Todo(
-                                id= todoBuffer.id,
+                                id = todoBuffer.id,
                                 title = title,
                                 note = note,
-                                done =Check,
+                                done = Check,
                                 dateTime = date,
-                                color= todoBuffer.color,
-                                category=category,
+                                color = todoBuffer.color,
+                                category = category,
                                 progress = sliderPosition,
                                 priority = priorityColor
                             )

@@ -2,7 +2,6 @@ package com.www.todofinal.ui.screens
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -48,7 +47,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -75,22 +73,28 @@ lateinit var todoBuffer: Todo
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Home(navHostController: NavHostController, x: MainActivity)
-{
-    if (intentData.isNotBlank()){
-    navHostController.navigate("edit")
-}
+fun Home(navHostController: NavHostController, x: MainActivity) {
+
+    if (intentData.isNotBlank()) {
+        navHostController.navigate("edit")
+    }
+
+//    val viewModel : HomeViewModel = hiltViewModel()
 
     val viewModel = ViewModelProvider(x)[HomeViewModel::class.java]
+
+
 //    val viewModel = viewModel<HomeViewModel>()
 //    val view :HomeViewModel by viewModels()
+
+
     var showPopup by rememberSaveable {
         mutableStateOf(false)
     }
 
     var holder = 0
 
-    val context= LocalContext.current
+    val context = LocalContext.current
 
     var term by rememberSaveable {
         mutableStateOf("")
@@ -105,25 +109,22 @@ fun Home(navHostController: NavHostController, x: MainActivity)
     val keyboardController = LocalSoftwareKeyboardController.current
 
 
-    Scaffold(
-        snackbarHost = {
+    Scaffold(snackbarHost = {
         SnackbarHost(hostState = snackbarHostState)
-    },
-        floatingActionButton = {
-            FloatingActionButton(
-                modifier = Modifier.padding(bottom = 78.dp),
-                onClick = {
-                    navHostController.navigate("edit")
-                },
-                content = {
-                    Icon(Icons.Default.Add, contentDescription = "Add")
-                },
-            )
-        }
-    )
-    {
-        Text(text = "Joel's Todo App",
-            modifier = Modifier.padding(120.dp,top=500.dp,),
+    }, floatingActionButton = {
+        FloatingActionButton(
+            modifier = Modifier.padding(bottom = 78.dp),
+            onClick = {
+                navHostController.navigate("edit")
+            },
+            content = {
+                Icon(Icons.Default.Add, contentDescription = "Add")
+            },
+        )
+    }) {
+        Text(
+            text = "Joel's Todo App",
+            modifier = Modifier.padding(120.dp, top = 500.dp),
             fontFamily = FontFamily.Cursive,
             fontSize = 20.sp
         )
@@ -131,18 +132,15 @@ fun Home(navHostController: NavHostController, x: MainActivity)
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(8.dp, bottom = 77.dp,top=8.dp,end=8.dp),
+                .padding(8.dp, bottom = 77.dp, top = 8.dp, end = 8.dp),
 //        .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
-        )
-        {
+        ) {
             Row {
 
-                TextField(
-                    keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Done
+                TextField(keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
                 ),
                     keyboardActions = KeyboardActions(onDone = {
                         keyboardController?.hide()
@@ -159,52 +157,46 @@ fun Home(navHostController: NavHostController, x: MainActivity)
                         unfocusedLeadingIconColor = Color.DarkGray
 
                     ),
-                    placeholder = { Text("Search Todos'")
-                                  },
+                    placeholder = {
+                        Text("Search Todos'")
+                    },
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Search,
                             contentDescription = null,
                             modifier = Modifier.size(24.dp)
                         )
-                    }
-                )
+                    })
             }
 
             LazyVerticalStaggeredGrid(
-                columns = StaggeredGridCells.Fixed(2),
-                modifier = Modifier.weight(1f)
-            )
-            {
+                columns = StaggeredGridCells.Fixed(2), modifier = Modifier.weight(1f)
+            ) {
                 searchList?.let {
                     items(it.size) { item ->
-                        ElevatedCard(
-                            colors = CardDefaults.cardColors(containerColor = Color(it[item].color)),
+                        ElevatedCard(colors = CardDefaults.cardColors(containerColor = Color(it[item].color)),
                             modifier = Modifier
                                 .padding(5.dp)
                                 .fillMaxSize()
-                                .clickable
-                                {
+                                .clickable {
                                     todoBuffer = it[item]
                                     navHostController.navigate("update")
-                                }
-                        )
-                        {
-                            var priority = when (Color(it[item].priority))
-                            {
-                                Color.Red ->    "High     "
+                                }) {
+                            var priority = when (Color(it[item].priority)) {
+                                Color.Red -> "High     "
                                 Color.Yellow -> "Medium"
-                                Color.Green ->  "Low      "
+                                Color.Green -> "Low      "
                                 else -> "High"
                             }
 
                             Row {
                                 var checked = it[item].done
-                                Checkbox(
-                                    checked = checked,
+                                Checkbox(checked = checked,
                                     colors = CheckboxDefaults.colors(Color.LightGray),
                                     modifier = Modifier
-                                        .padding(start = 4.dp, top = 4.dp, end = 4.dp)
+                                        .padding(
+                                            start = 4.dp, top = 4.dp, end = 4.dp
+                                        )
                                         .size(28.dp)
                                         .scale(.75f),
                                     onCheckedChange = { change ->
@@ -222,8 +214,7 @@ fun Home(navHostController: NavHostController, x: MainActivity)
                                                 it[item].priority
                                             )
                                         )
-                                    }
-                                )
+                                    })
                                 Text(
                                     color = Color.Black,
                                     text = it[item].title,
@@ -246,16 +237,14 @@ fun Home(navHostController: NavHostController, x: MainActivity)
                                         .clickable(onClick = {
                                             holder = item
                                             showPopup = true
-                                        }
-                                        )
+                                        })
                                 )
                                 if (showPopup) {
                                     AlertDialog(onDismissRequest = { showPopup = false },
                                         title = { Text(text = "Confirm Deletion") },
                                         text = { Text(text = "Are you sure?") },
                                         confirmButton = {
-                                            Button(onClick =
-                                            {
+                                            Button(onClick = {
                                                 val dummy = it[holder]
                                                 viewModel.dltTodo(it[holder])
                                                 showPopup = false
@@ -269,17 +258,15 @@ fun Home(navHostController: NavHostController, x: MainActivity)
                                                         SnackbarResult.ActionPerformed -> {
                                                             viewModel.addTodo(dummy)
                                                         }
+
                                                         SnackbarResult.Dismissed -> {/* Handle snackbar dismissed */
                                                         }
                                                     }
                                                 }
-                                            }
-                                            )
-                                            {
+                                            }) {
                                                 Text(text = "Yes")
                                             }
-                                        }
-                                    )
+                                        })
                                 }
                             }
 
@@ -353,7 +340,9 @@ fun Home(navHostController: NavHostController, x: MainActivity)
 
                                 val sendIntent = Intent().apply {
                                     action = Intent.ACTION_SEND
-                                    putExtra(Intent.EXTRA_TEXT, "${it[item].title}: ${it[item].note}")
+                                    putExtra(
+                                        Intent.EXTRA_TEXT, "${it[item].title}: ${it[item].note}"
+                                    )
                                     type = "text/plain"
                                 }
 
@@ -368,8 +357,7 @@ fun Home(navHostController: NavHostController, x: MainActivity)
                                         .clickable(onClick = {
                                             startActivity(context, sendIntent, null)
 
-                                        }
-                                        )
+                                        })
                                 )
                             }
                         }

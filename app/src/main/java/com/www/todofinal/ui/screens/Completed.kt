@@ -1,7 +1,6 @@
 package com.www.todofinal.ui.screens
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
@@ -25,9 +23,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -62,7 +58,6 @@ import androidx.navigation.NavHostController
 import com.www.todofinal.MainActivity
 import com.www.todofinal.data.roomdb.Todo
 import com.www.todofinal.viewModel.CompletedViewModel
-import com.www.todofinal.viewModel.HomeViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,15 +72,15 @@ fun Completed(navHostController: NavHostController, x: MainActivity) {
         mutableStateOf(false)
     }
 
-    var holder=0
+    var holder = 0
 
     var term by rememberSaveable {
         mutableStateOf("")
     }
 
-    val searchList by viewModel3.CompleteTodo(term).observeAsState()
+    val searchList by viewModel3.completeTodo(term).observeAsState()
 
-    val scope= rememberCoroutineScope()
+    val scope = rememberCoroutineScope()
 
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -97,11 +92,13 @@ fun Completed(navHostController: NavHostController, x: MainActivity) {
         },
     )
     {
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp, bottom = 77.dp,top=8.dp,end=8.dp),
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp, bottom = 77.dp, top = 8.dp, end = 8.dp),
             verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally)
+            horizontalAlignment = Alignment.CenterHorizontally
+        )
         {
             Row {
 
@@ -115,7 +112,7 @@ fun Completed(navHostController: NavHostController, x: MainActivity) {
                     }),
                     value = term,
                     modifier = Modifier.padding(bottom = 10.dp),
-                    onValueChange ={term=it},
+                    onValueChange = { term = it },
                     singleLine = true,
                     shape = RoundedCornerShape(20.dp),
                     colors = TextFieldDefaults.textFieldColors(
@@ -134,23 +131,24 @@ fun Completed(navHostController: NavHostController, x: MainActivity) {
                 )
             }
 
-                    Text(text = "Completed Tasks :",
-                        modifier=Modifier.padding(bottom = 15.dp),
-                        fontFamily = FontFamily.Cursive,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight(700)
-                    )
+            Text(
+                text = "Completed Tasks :",
+                modifier = Modifier.padding(bottom = 15.dp),
+                fontFamily = FontFamily.Cursive,
+                fontSize = 20.sp,
+                fontWeight = FontWeight(700)
+            )
 
             LazyVerticalStaggeredGrid(
-                columns = StaggeredGridCells.Fixed(2) ,
+                columns = StaggeredGridCells.Fixed(2),
                 modifier = Modifier.weight(1f)
             )
             {
                 searchList?.let {
-                    items(it.size){ item->
+                    items(it.size) { item ->
 
                         ElevatedCard(
-                            colors= CardDefaults.cardColors(containerColor = Color(it[item].color)),
+                            colors = CardDefaults.cardColors(containerColor = Color(it[item].color)),
                             modifier = Modifier
                                 .padding(5.dp)
                                 .fillMaxSize()
@@ -160,14 +158,14 @@ fun Completed(navHostController: NavHostController, x: MainActivity) {
                                 },
                         )
                         {
-                            var priority=when(Color(it[item].priority)){
-                                Color.Red->"High"
-                                Color.Yellow->"Medium"
-                                Color.Green->"Low"
-                                else->"High"
+                            var priority = when (Color(it[item].priority)) {
+                                Color.Red -> "High"
+                                Color.Yellow -> "Medium"
+                                Color.Green -> "Low"
+                                else -> "High"
                             }
                             Row {
-                                var checked =it[item].done
+                                var checked = it[item].done
                                 Checkbox(
                                     checked = checked,
                                     colors = CheckboxDefaults.colors(Color.LightGray),
@@ -177,27 +175,34 @@ fun Completed(navHostController: NavHostController, x: MainActivity) {
                                             top = 4.dp,
                                             end = 4.dp
                                         )
-                                        .size(28.dp).scale(.75f),
-                                    onCheckedChange ={ change->
-                                        checked=change
-                                        viewModel3.addTodo(Todo(it[item].id,
-                                            it[item].title,
-                                            it[item].note,
-                                            checked,
-                                            it[item].dateTime,
-                                            it[item].color,
-                                            it[item].category,
-                                            it[item].progress,
-                                            it[item].priority))
+                                        .size(28.dp)
+                                        .scale(.75f),
+                                    onCheckedChange = { change ->
+                                        checked = change
+                                        viewModel3.addTodo(
+                                            Todo(
+                                                it[item].id,
+                                                it[item].title,
+                                                it[item].note,
+                                                checked,
+                                                it[item].dateTime,
+                                                it[item].color,
+                                                it[item].category,
+                                                it[item].progress,
+                                                it[item].priority
+                                            )
+                                        )
                                     }
                                 )
-                                Text(color = Color.Black,
+                                Text(
+                                    color = Color.Black,
                                     text = it[item].title,
                                     fontStyle = FontStyle.Italic,
                                     fontWeight = FontWeight(500),
                                     modifier = Modifier
                                         .padding(top = 4.dp, end = 0.dp)
-                                        .weight(1f), fontSize = 15.sp)
+                                        .weight(1f), fontSize = 15.sp
+                                )
 
                                 Icon(
                                     Icons.Default.Delete,
@@ -205,7 +210,8 @@ fun Completed(navHostController: NavHostController, x: MainActivity) {
                                     tint = Color.DarkGray,
                                     modifier = Modifier
                                         .weight(.25f)
-                                        .padding(start = 0.dp, top = 7.dp, end = 4.dp).scale(.9f)
+                                        .padding(start = 0.dp, top = 7.dp, end = 4.dp)
+                                        .scale(.9f)
                                         .clickable(onClick = {
                                             holder = item
                                             showPopup = true
@@ -213,70 +219,83 @@ fun Completed(navHostController: NavHostController, x: MainActivity) {
                                         }
                                         )
                                 )
-                                if (showPopup){
+                                if (showPopup) {
                                     AlertDialog(
                                         onDismissRequest = { showPopup = false },
-                                        title = { Text(text = "Confirm Deletion")},
-                                        text = { Text(text = "Are you sure?")},
-                                        confirmButton = { Button(onClick = {
-                                            val dummy=it[holder]
-                                            viewModel3.dltTodo(it[holder])
-                                            showPopup=false
-                                            scope.launch {
-                                                val result=snackbarHostState
-                                                    .showSnackbar(
-                                                        message="Revert Deletion",
-                                                        actionLabel = "Undo",
-                                                        duration = SnackbarDuration.Short
-                                                    )
-                                                when(result){
-                                                    SnackbarResult.ActionPerformed -> {
-                                                        viewModel3.addTodo(dummy)
-                                                    }
-                                                    SnackbarResult.Dismissed -> {
-                                                        /* Handle snackbar dismissed */
-                                                    }
+                                        title = { Text(text = "Confirm Deletion") },
+                                        text = { Text(text = "Are you sure?") },
+                                        confirmButton = {
+                                            Button(onClick = {
+                                                val dummy = it[holder]
+                                                viewModel3.dltTodo(it[holder])
+                                                showPopup = false
+                                                scope.launch {
+                                                    val result = snackbarHostState
+                                                        .showSnackbar(
+                                                            message = "Revert Deletion",
+                                                            actionLabel = "Undo",
+                                                            duration = SnackbarDuration.Short
+                                                        )
+                                                    when (result) {
+                                                        SnackbarResult.ActionPerformed -> {
+                                                            viewModel3.addTodo(dummy)
+                                                        }
 
+                                                        SnackbarResult.Dismissed -> {
+                                                            /* Handle snackbar dismissed */
+                                                        }
+
+                                                    }
                                                 }
                                             }
-                                        }
-                                        )
-                                        {
-                                            Text(text = "Yes")
-                                        }
+                                            )
+                                            {
+                                                Text(text = "Yes")
+                                            }
                                         }
                                     )
                                 }
                             }
 
-                            Text(modifier = Modifier.padding(8.dp ),
+                            Text(
+                                modifier = Modifier.padding(8.dp),
                                 style = TextStyle(
-                                    lineHeight = 17.sp ),
+                                    lineHeight = 17.sp
+                                ),
                                 fontSize = 13.sp,
                                 text = it[item].note,
                                 fontWeight = FontWeight(700),
 
                                 fontFamily = FontFamily.Cursive,
 
-                                color = Color.DarkGray)
+                                color = Color.DarkGray
+                            )
                             Row {
-                                Text(text = "Due : ",
+                                Text(
+                                    text = "Due : ",
                                     fontSize = 10.sp,
-                                    modifier = Modifier.padding(4.dp ))
+                                    modifier = Modifier.padding(4.dp)
+                                )
 
-                                Text(modifier = Modifier.padding(start=0.dp,4.dp ),
+                                Text(
+                                    modifier = Modifier.padding(start = 0.dp, 4.dp),
                                     fontSize = 10.sp,
                                     text = it[item].dateTime,
-                                    color = Color.Blue)
+                                    color = Color.Blue
+                                )
                             }
                             Row {
-                                Text(text = "Category : ",
+                                Text(
+                                    text = "Category : ",
                                     fontSize = 10.sp,
-                                    modifier = Modifier.padding(4.dp ))
-                                Text(modifier = Modifier.padding(start=0.dp,4.dp ),
+                                    modifier = Modifier.padding(4.dp)
+                                )
+                                Text(
+                                    modifier = Modifier.padding(start = 0.dp, 4.dp),
                                     fontSize = 10.sp,
                                     text = it[item].category,
-                                    color = Color.Blue)
+                                    color = Color.Blue
+                                )
                             }
                             Row {
                                 Text(
@@ -292,14 +311,18 @@ fun Completed(navHostController: NavHostController, x: MainActivity) {
                                 )
                             }
                             Row {
-                                Text(text = "Priority : ",
+                                Text(
+                                    text = "Priority : ",
                                     fontSize = 10.sp,
-                                    modifier = Modifier.padding(4.dp ))
+                                    modifier = Modifier.padding(4.dp)
+                                )
 
-                                Text(modifier = Modifier.padding(start=0.dp,4.dp ),
+                                Text(
+                                    modifier = Modifier.padding(start = 0.dp, 4.dp),
                                     fontSize = 10.sp,
                                     text = priority,
-                                    color = Color(it[item].priority))
+                                    color = Color(it[item].priority)
+                                )
                             }
                         }
                     }

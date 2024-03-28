@@ -1,8 +1,6 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-//    id("com.google.devtools.ksp")
-//    kotlin("kapt")
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
 }
@@ -23,9 +21,7 @@ android {
             useSupportLibrary = true
         }
     }
-//    kapt {
-//        correctErrorTypes = true
-//    }
+
 
     buildTypes {
         release {
