@@ -69,6 +69,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import com.www.todofinal.MainActivity
 import com.www.todofinal.data.roomdb.Todo
+import com.www.todofinal.intentData
 import com.www.todofinal.viewModel.EditViewModel
 import java.time.Instant
 import java.time.LocalDateTime
@@ -82,16 +83,17 @@ import kotlin.random.Random
 @Composable
 fun Edit(navController: NavHostController, x: MainActivity) {
 
-        var sliderPosition by remember { mutableFloatStateOf(0f) }
+        val viewModel2 = ViewModelProvider(x)[EditViewModel::class.java]
 
+        var sliderPosition by remember { mutableFloatStateOf(0f) }
 
         val context = LocalContext.current
 
-        val viewModel2 = ViewModelProvider(x)[EditViewModel::class.java]
-
         var note by rememberSaveable {
-            mutableStateOf("")
+            mutableStateOf(intentData)
         }
+
+        intentData=""
 
         var title by rememberSaveable {
             mutableStateOf("")

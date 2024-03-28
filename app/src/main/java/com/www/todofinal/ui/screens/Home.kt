@@ -66,6 +66,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.www.todofinal.MainActivity
 import com.www.todofinal.data.roomdb.Todo
+import com.www.todofinal.intentData
 import com.www.todofinal.viewModel.HomeViewModel
 import kotlinx.coroutines.launch
 
@@ -76,6 +77,9 @@ lateinit var todoBuffer: Todo
 @Composable
 fun Home(navHostController: NavHostController, x: MainActivity)
 {
+    if (intentData.isNotBlank()){
+    navHostController.navigate("edit")
+}
 
     val viewModel = ViewModelProvider(x)[HomeViewModel::class.java]
 //    val viewModel = viewModel<HomeViewModel>()
@@ -119,8 +123,9 @@ fun Home(navHostController: NavHostController, x: MainActivity)
     )
     {
         Text(text = "Joel's Todo App",
-            modifier = Modifier.padding(125.dp,top=500.dp,),
-            fontFamily = FontFamily.Cursive
+            modifier = Modifier.padding(120.dp,top=500.dp,),
+            fontFamily = FontFamily.Cursive,
+            fontSize = 20.sp
         )
 
         Column(
@@ -321,14 +326,14 @@ fun Home(navHostController: NavHostController, x: MainActivity)
 
                             Row {
                                 Text(
-                                    text = "Progression : ",
+                                    text = "Progression :",
                                     fontSize = 10.sp,
                                     modifier = Modifier.padding(4.dp)
                                 )
                                 Text(
                                     modifier = Modifier.padding(start = 0.dp, 4.dp),
                                     fontSize = 10.sp,
-                                    text = it[item].progress.toInt().toString(),
+                                    text = "${it[item].progress.toInt()}%",
                                     color = Color.Blue
                                 )
                             }

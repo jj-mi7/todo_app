@@ -324,14 +324,14 @@ fun Category(navHostController: NavHostController, x: MainActivity) {
                             }
                             Row {
                                 Text(
-                                    text = "Progression : ",
+                                    text = "Progression :",
                                     fontSize = 10.sp,
                                     modifier = Modifier.padding(4.dp)
                                 )
                                 Text(
                                     modifier = Modifier.padding(start = 0.dp, 4.dp),
                                     fontSize = 10.sp,
-                                    text = it[item].progress.toInt().toString(),
+                                    text = "${it[item].progress.toInt()}%",
                                     color = Color.Blue
                                 )
                             }

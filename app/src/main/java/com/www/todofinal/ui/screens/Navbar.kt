@@ -26,6 +26,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.www.todofinal.MainActivity
 import com.www.todofinal.data.roomdb.Todo
+import com.www.todofinal.intentData
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -68,6 +69,7 @@ fun Navbar(x: MainActivity) {
     }
     )
     {
+
         NavHost(navController = navController, startDestination = "home")
         {
             composable("home")  {Home(navController,x) }
