@@ -60,13 +60,17 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.www.todofinal.MainActivity
 import com.www.todofinal.data.roomdb.Todo
 import com.www.todofinal.viewModel.AddUpdateViewModel
 import com.www.todofinal.viewModel.HomeViewModel
 import kotlinx.coroutines.launch
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -75,16 +79,15 @@ import kotlinx.coroutines.launch
 fun Home(navHostController: NavHostController, x: MainActivity) {
     val viewModel = ViewModelProvider(x)[HomeViewModel::class.java]
     val bufferViewModel = ViewModelProvider(x)[AddUpdateViewModel::class.java]
-
+//    val viewModel :HomeViewModel = viewModel()
+//    val viewModel = viewModel<HomeViewModel>()
+//    val viewModel : HomeViewModel = hiltViewModel()
     LaunchedEffect(Unit) {
         if (viewModel.getIntentData().isNotBlank()) {
             navHostController.navigate("edit")
         }
     }
 
-//    val viewModel : HomeViewModel = hiltViewModel()
-//    val viewModel = viewModel<HomeViewModel>()
-//    val view :HomeViewModel by viewModels()
 
     var showPopup by rememberSaveable {
         mutableStateOf(false)
@@ -133,7 +136,6 @@ fun Home(navHostController: NavHostController, x: MainActivity) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(8.dp, bottom = 77.dp, top = 8.dp, end = 8.dp),
-//        .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
