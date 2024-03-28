@@ -2,18 +2,11 @@ package com.www.todofinal.ui.screens
 
 import android.annotation.SuppressLint
 import android.widget.Toast
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,8 +14,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -69,8 +60,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import com.www.todofinal.MainActivity
 import com.www.todofinal.data.roomdb.Todo
-import com.www.todofinal.intentData
-import com.www.todofinal.viewModel.EditViewModel
+import com.www.todofinal.viewModel.AddUpdateViewModel
+import com.www.todofinal.viewModel.HomeViewModel
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -83,17 +74,18 @@ import kotlin.random.Random
 @Composable
 fun Edit(navController: NavHostController, x: MainActivity) {
 
-    val viewModel2 = ViewModelProvider(x)[EditViewModel::class.java]
+    val viewModel2 = ViewModelProvider(x)[AddUpdateViewModel::class.java]
+    val homeViewModel = ViewModelProvider(x)[HomeViewModel::class.java]
 
     var sliderPosition by remember { mutableFloatStateOf(0f) }
 
     val context = LocalContext.current
 
     var note by rememberSaveable {
-        mutableStateOf(intentData)
+        mutableStateOf(homeViewModel.getIntentData())
     }
 
-    intentData=""
+    homeViewModel.setIntentData("")
 
     var title by rememberSaveable {
         mutableStateOf("")
@@ -123,7 +115,9 @@ fun Edit(navController: NavHostController, x: MainActivity) {
 
     var expanded by rememberSaveable { mutableStateOf(false) }
 
-    var priorityColor: Int = Color.Red.toArgb()
+    var priorityColor by rememberSaveable {
+        mutableStateOf(Color.Red.toArgb())
+    }
 
     Scaffold(
         topBar = {
@@ -190,7 +184,7 @@ fun Edit(navController: NavHostController, x: MainActivity) {
 
                 Button(
                     onClick = { openDialog.value = true },
-                    modifier = Modifier.padding( 10.dp)
+                    modifier = Modifier.padding(10.dp)
                 )
                 {
                     Text(text = "Pick Due Date")
@@ -290,12 +284,17 @@ fun Edit(navController: NavHostController, x: MainActivity) {
                     }
                 }
                 Column {
-                    Text(text = "Progression: ${sliderPosition.toInt()}",
+                    Text(
+                        text = "Progression: ${sliderPosition.toInt()}",
                         fontWeight = FontWeight(700),
-                        modifier = Modifier.padding(start=15.dp,10.dp),
-                        fontFamily = FontFamily.Monospace)
+                        modifier = Modifier.padding(start = 15.dp, 10.dp),
+                        fontFamily = FontFamily.Monospace
+                    )
 
-                    Slider(modifier = Modifier.padding(5.dp).scale(.80f),
+                    Slider(
+                        modifier = Modifier
+                            .padding(5.dp)
+                            .scale(.80f),
                         value = sliderPosition,
                         onValueChange = { sliderPosition = it },
                         steps = 100,

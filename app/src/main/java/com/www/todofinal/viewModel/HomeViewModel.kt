@@ -14,7 +14,16 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val repo: TodoRepo
 ) : ViewModel() {
-    val todoAll = repo.all
+
+    private var intentData: String = ""
+
+    fun getIntentData(): String {
+        return intentData
+    }
+
+    fun setIntentData(data: String) {
+        intentData = data
+    }
 
     fun searchTodo(term: String): LiveData<List<Todo>> {
         return repo.searchTodo(term)

@@ -1,4 +1,4 @@
-package com.www.todofinal.ui.screens
+package com.www.todofinal.ui.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done

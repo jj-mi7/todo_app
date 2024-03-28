@@ -37,6 +37,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -60,39 +61,38 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.www.todofinal.MainActivity
 import com.www.todofinal.data.roomdb.Todo
-import com.www.todofinal.intentData
+import com.www.todofinal.viewModel.AddUpdateViewModel
 import com.www.todofinal.viewModel.HomeViewModel
 import kotlinx.coroutines.launch
 
-lateinit var todoBuffer: Todo
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Home(navHostController: NavHostController, x: MainActivity) {
+    val viewModel = ViewModelProvider(x)[HomeViewModel::class.java]
+    val bufferViewModel = ViewModelProvider(x)[AddUpdateViewModel::class.java]
 
-    if (intentData.isNotBlank()) {
-        navHostController.navigate("edit")
+    LaunchedEffect(Unit) {
+        if (viewModel.getIntentData().isNotBlank()) {
+            navHostController.navigate("edit")
+        }
     }
 
 //    val viewModel : HomeViewModel = hiltViewModel()
-
-    val viewModel = ViewModelProvider(x)[HomeViewModel::class.java]
-
-
 //    val viewModel = viewModel<HomeViewModel>()
 //    val view :HomeViewModel by viewModels()
-
 
     var showPopup by rememberSaveable {
         mutableStateOf(false)
     }
 
-    var holder = 0
+    var holder by rememberSaveable {
+        mutableStateOf(0)
+    }
 
     val context = LocalContext.current
 
@@ -179,7 +179,7 @@ fun Home(navHostController: NavHostController, x: MainActivity) {
                                 .padding(5.dp)
                                 .fillMaxSize()
                                 .clickable {
-                                    todoBuffer = it[item]
+                                    bufferViewModel.setBuffer(it[item])
                                     navHostController.navigate("update")
                                 }) {
                             var priority = when (Color(it[item].priority)) {

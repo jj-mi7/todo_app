@@ -57,6 +57,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import com.www.todofinal.MainActivity
 import com.www.todofinal.data.roomdb.Todo
+import com.www.todofinal.viewModel.AddUpdateViewModel
 import com.www.todofinal.viewModel.CompletedViewModel
 import kotlinx.coroutines.launch
 
@@ -67,12 +68,15 @@ fun Completed(navHostController: NavHostController, x: MainActivity) {
 
 
     val viewModel3 = ViewModelProvider(x)[CompletedViewModel::class.java]
+    val bufferViewModel = ViewModelProvider(x)[AddUpdateViewModel::class.java]
 
     var showPopup by rememberSaveable {
         mutableStateOf(false)
     }
 
-    var holder = 0
+    var holder by rememberSaveable {
+        mutableStateOf(0)
+    }
 
     var term by rememberSaveable {
         mutableStateOf("")
@@ -153,7 +157,7 @@ fun Completed(navHostController: NavHostController, x: MainActivity) {
                                 .padding(5.dp)
                                 .fillMaxSize()
                                 .clickable {
-                                    todoBuffer = it[item]
+                                    bufferViewModel.setBuffer(it[item])
                                     navHostController.navigate("update")
                                 },
                         )

@@ -1,4 +1,4 @@
-package com.www.todofinal.ui.screens
+package com.www.todofinal.ui.navigation
 
 import android.annotation.SuppressLint
 import androidx.compose.material3.Icon
@@ -13,6 +13,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.www.todofinal.MainActivity
+import com.www.todofinal.ui.screens.Category
+import com.www.todofinal.ui.screens.Completed
+import com.www.todofinal.ui.screens.Edit
+import com.www.todofinal.ui.screens.Home
+import com.www.todofinal.ui.screens.UpdateScreen
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")

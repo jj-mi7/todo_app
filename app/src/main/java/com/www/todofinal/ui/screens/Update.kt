@@ -60,34 +60,34 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import com.www.todofinal.MainActivity
 import com.www.todofinal.data.roomdb.Todo
-import com.www.todofinal.viewModel.UpdateViewModel
+import com.www.todofinal.viewModel.AddUpdateViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UpdateScreen(navController: NavHostController, x: MainActivity) {
-    val viewModel4 = ViewModelProvider(x)[UpdateViewModel::class.java]
-    Log.d("joel", "logUpdate")
 
-    var sliderPosition by remember { mutableFloatStateOf(todoBuffer.progress) }
+    val viewModel4 = ViewModelProvider(x)[AddUpdateViewModel::class.java]
+
+    var sliderPosition by remember { mutableFloatStateOf(viewModel4.getBuffer().progress) }
 
     var note by rememberSaveable {
-        mutableStateOf(todoBuffer.note)
+        mutableStateOf(viewModel4.getBuffer().note)
     }
 
     var category by rememberSaveable {
-        mutableStateOf(todoBuffer.category)
+        mutableStateOf(viewModel4.getBuffer().category)
     }
 
     var title by rememberSaveable {
-        mutableStateOf(todoBuffer.title)
+        mutableStateOf(viewModel4.getBuffer().title)
     }
 
     var date by rememberSaveable {
-        mutableStateOf(todoBuffer.dateTime)
+        mutableStateOf(viewModel4.getBuffer().dateTime)
     }
 
     var Check by rememberSaveable {
-        mutableStateOf(todoBuffer.done)
+        mutableStateOf(viewModel4.getBuffer().done)
     }
 
     val state = rememberDatePickerState()
@@ -98,7 +98,7 @@ fun UpdateScreen(navController: NavHostController, x: MainActivity) {
 
     val itemsPriority = listOf("Work", "Personal")
 
-    var selectedItemPriority by rememberSaveable { mutableStateOf(todoBuffer.category) }
+    var selectedItemPriority by rememberSaveable { mutableStateOf(viewModel4.getBuffer().category) }
 
     var expandedPriority by rememberSaveable { mutableStateOf(false) }
 
@@ -106,7 +106,7 @@ fun UpdateScreen(navController: NavHostController, x: MainActivity) {
 
     var selectedItem by rememberSaveable {
         mutableStateOf(
-            when (Color(todoBuffer.priority)) {
+            when (Color(viewModel4.getBuffer().priority)) {
                 Color.Red -> "High"
                 Color.Yellow -> "Medium"
                 Color.Green -> "Low"
@@ -116,7 +116,9 @@ fun UpdateScreen(navController: NavHostController, x: MainActivity) {
     }
     var expanded by rememberSaveable { mutableStateOf(false) }
 
-    var priorityColor: Int = todoBuffer.priority
+    var priorityColor by rememberSaveable {
+        mutableStateOf(viewModel4.getBuffer().priority)
+    }
 
     Scaffold(
 
@@ -228,7 +230,7 @@ fun UpdateScreen(navController: NavHostController, x: MainActivity) {
 
                 date = millisToDate(state.selectedDateMillis ?: 0L)
                 if (date == "01-01-1970") {
-                    date = todoBuffer.dateTime
+                    date = viewModel4.getBuffer().dateTime
                 }
 
                 Column(
@@ -287,7 +289,7 @@ fun UpdateScreen(navController: NavHostController, x: MainActivity) {
                                         items[1] -> Color.Yellow.toArgb()
                                         items[2] -> Color.Green.toArgb()
                                         else -> {
-                                            todoBuffer.priority
+                                            viewModel4.getBuffer().priority
                                         }
                                     }
                                     expanded = false
@@ -332,12 +334,12 @@ fun UpdateScreen(navController: NavHostController, x: MainActivity) {
                     if (title.isNotBlank() or note.isNotBlank()) {
                         viewModel4.addTodo(
                             Todo(
-                                id = todoBuffer.id,
+                                id = viewModel4.getBuffer().id,
                                 title = title,
                                 note = note,
                                 done = Check,
                                 dateTime = date,
-                                color = todoBuffer.color,
+                                color = viewModel4.getBuffer().color,
                                 category = category,
                                 progress = sliderPosition,
                                 priority = priorityColor

@@ -10,11 +10,21 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class UpdateViewModel @Inject constructor(
+class AddUpdateViewModel @Inject constructor(
     private val repo: TodoRepo
 ) : ViewModel() {
+
+    private lateinit var todo:Todo
+
+    fun getBuffer():Todo{
+        return todo
+    }
+    fun setBuffer(todoo: Todo){
+        todo=todoo
+    }
     fun addTodo(todo: Todo) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO)
+        {
             repo.addTodo(todo)
         }
     }
