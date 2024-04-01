@@ -108,7 +108,7 @@ dependencies {
     implementation( "androidx.activity:activity-compose:1.4.0")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
     implementation ("com.google.dagger:hilt-android:2.48")
-    implementation ("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
+//    implementation ("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
     ksp ("androidx.hilt:hilt-compiler:1.0.0")
     implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
 //    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")

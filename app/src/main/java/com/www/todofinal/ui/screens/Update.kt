@@ -68,7 +68,7 @@ fun UpdateScreen(navController: NavHostController, x: MainActivity) {
 
     val viewModel4 = ViewModelProvider(x)[AddUpdateViewModel::class.java]
 
-    var sliderPosition by remember { mutableFloatStateOf(viewModel4.getBuffer().progress) }
+    var sliderPosition by rememberSaveable { mutableFloatStateOf(viewModel4.getBuffer().progress) }
 
     var note by rememberSaveable {
         mutableStateOf(viewModel4.getBuffer().note)
@@ -347,6 +347,7 @@ fun UpdateScreen(navController: NavHostController, x: MainActivity) {
                         )
                         Toast.makeText(context, "Updated Todo", Toast.LENGTH_SHORT).show()
                     }
+                    viewModel4.set0Buffer()
                     navController.popBackStack()
                 }
             )
