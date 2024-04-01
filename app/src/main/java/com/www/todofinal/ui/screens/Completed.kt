@@ -64,6 +64,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun Completed(navHostController: NavHostController) {
+    //
 
     val viewModel3: CompletedViewModel = hiltViewModel()
     val bufferViewModel: AddUpdateViewModel = hiltViewModel()
