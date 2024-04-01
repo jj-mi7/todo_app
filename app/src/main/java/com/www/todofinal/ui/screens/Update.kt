@@ -56,6 +56,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import com.www.todofinal.MainActivity
@@ -64,9 +65,9 @@ import com.www.todofinal.viewModel.AddUpdateViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UpdateScreen(navController: NavHostController, x: MainActivity) {
+fun UpdateScreen(navController: NavHostController) {
 
-    val viewModel4 = ViewModelProvider(x)[AddUpdateViewModel::class.java]
+    val viewModel4: AddUpdateViewModel = hiltViewModel()
 
     var sliderPosition by rememberSaveable { mutableFloatStateOf(viewModel4.getBuffer().progress) }
 

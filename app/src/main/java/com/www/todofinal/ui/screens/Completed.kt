@@ -53,9 +53,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelProvider
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.www.todofinal.MainActivity
 import com.www.todofinal.data.roomdb.Todo
 import com.www.todofinal.viewModel.AddUpdateViewModel
 import com.www.todofinal.viewModel.CompletedViewModel
@@ -64,11 +63,10 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun Completed(navHostController: NavHostController, x: MainActivity) {
+fun Completed(navHostController: NavHostController) {
 
-
-    val viewModel3 = ViewModelProvider(x)[CompletedViewModel::class.java]
-    val bufferViewModel = ViewModelProvider(x)[AddUpdateViewModel::class.java]
+    val viewModel3: CompletedViewModel = hiltViewModel()
+    val bufferViewModel: AddUpdateViewModel = hiltViewModel()
 
     var showPopup by rememberSaveable {
         mutableStateOf(false)
@@ -94,23 +92,19 @@ fun Completed(navHostController: NavHostController, x: MainActivity) {
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         },
-    )
-    {
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(8.dp, bottom = 77.dp, top = 8.dp, end = 8.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
-        )
-        {
+        ) {
             Row {
 
-                TextField(
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Done
-                    ),
+                TextField(keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
+                ),
                     keyboardActions = KeyboardActions(onDone = {
                         keyboardController?.hide()
                     }),
@@ -131,8 +125,7 @@ fun Completed(navHostController: NavHostController, x: MainActivity) {
                             contentDescription = null,
                             modifier = Modifier.size(24.dp)
                         )
-                    }
-                )
+                    })
             }
 
             Text(
@@ -144,10 +137,8 @@ fun Completed(navHostController: NavHostController, x: MainActivity) {
             )
 
             LazyVerticalStaggeredGrid(
-                columns = StaggeredGridCells.Fixed(2),
-                modifier = Modifier.weight(1f)
-            )
-            {
+                columns = StaggeredGridCells.Fixed(2), modifier = Modifier.weight(1f)
+            ) {
                 searchList?.let {
                     items(it.size) { item ->
 
@@ -160,8 +151,7 @@ fun Completed(navHostController: NavHostController, x: MainActivity) {
                                     bufferViewModel.setBuffer(it[item])
                                     navHostController.navigate("update")
                                 },
-                        )
-                        {
+                        ) {
                             var priority = when (Color(it[item].priority)) {
                                 Color.Red -> "High"
                                 Color.Yellow -> "Medium"
@@ -170,14 +160,11 @@ fun Completed(navHostController: NavHostController, x: MainActivity) {
                             }
                             Row {
                                 var checked = it[item].done
-                                Checkbox(
-                                    checked = checked,
+                                Checkbox(checked = checked,
                                     colors = CheckboxDefaults.colors(Color.LightGray),
                                     modifier = Modifier
                                         .padding(
-                                            start = 4.dp,
-                                            top = 4.dp,
-                                            end = 4.dp
+                                            start = 4.dp, top = 4.dp, end = 4.dp
                                         )
                                         .size(28.dp)
                                         .scale(.75f),
@@ -196,8 +183,7 @@ fun Completed(navHostController: NavHostController, x: MainActivity) {
                                                 it[item].priority
                                             )
                                         )
-                                    }
-                                )
+                                    })
                                 Text(
                                     color = Color.Black,
                                     text = it[item].title,
@@ -205,11 +191,11 @@ fun Completed(navHostController: NavHostController, x: MainActivity) {
                                     fontWeight = FontWeight(500),
                                     modifier = Modifier
                                         .padding(top = 4.dp, end = 0.dp)
-                                        .weight(1f), fontSize = 15.sp
+                                        .weight(1f),
+                                    fontSize = 15.sp
                                 )
 
-                                Icon(
-                                    Icons.Default.Delete,
+                                Icon(Icons.Default.Delete,
                                     contentDescription = "delete",
                                     tint = Color.DarkGray,
                                     modifier = Modifier
@@ -220,12 +206,10 @@ fun Completed(navHostController: NavHostController, x: MainActivity) {
                                             holder = item
                                             showPopup = true
 
-                                        }
-                                        )
+                                        })
                                 )
                                 if (showPopup) {
-                                    AlertDialog(
-                                        onDismissRequest = { showPopup = false },
+                                    AlertDialog(onDismissRequest = { showPopup = false },
                                         title = { Text(text = "Confirm Deletion") },
                                         text = { Text(text = "Are you sure?") },
                                         confirmButton = {
@@ -234,30 +218,25 @@ fun Completed(navHostController: NavHostController, x: MainActivity) {
                                                 viewModel3.dltTodo(it[holder])
                                                 showPopup = false
                                                 scope.launch {
-                                                    val result = snackbarHostState
-                                                        .showSnackbar(
-                                                            message = "Revert Deletion",
-                                                            actionLabel = "Undo",
-                                                            duration = SnackbarDuration.Short
-                                                        )
+                                                    val result = snackbarHostState.showSnackbar(
+                                                        message = "Revert Deletion",
+                                                        actionLabel = "Undo",
+                                                        duration = SnackbarDuration.Short
+                                                    )
                                                     when (result) {
                                                         SnackbarResult.ActionPerformed -> {
                                                             viewModel3.addTodo(dummy)
                                                         }
 
-                                                        SnackbarResult.Dismissed -> {
-                                                            /* Handle snackbar dismissed */
+                                                        SnackbarResult.Dismissed -> {/* Handle snackbar dismissed */
                                                         }
 
                                                     }
                                                 }
-                                            }
-                                            )
-                                            {
+                                            }) {
                                                 Text(text = "Yes")
                                             }
-                                        }
-                                    )
+                                        })
                                 }
                             }
 

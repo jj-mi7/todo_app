@@ -56,9 +56,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelProvider
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.www.todofinal.MainActivity
 import com.www.todofinal.data.roomdb.Todo
 import com.www.todofinal.viewModel.AddUpdateViewModel
 import com.www.todofinal.viewModel.HomeViewModel
@@ -72,10 +71,10 @@ import kotlin.random.Random
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun Edit(navController: NavHostController, x: MainActivity) {
+fun Edit(navController: NavHostController) {
 
-    val viewModel2 = ViewModelProvider(x)[AddUpdateViewModel::class.java]
-    val homeViewModel = ViewModelProvider(x)[HomeViewModel::class.java]
+    val viewModel2: AddUpdateViewModel = hiltViewModel()
+    val homeViewModel: HomeViewModel = hiltViewModel()
 
     var sliderPosition by remember { mutableFloatStateOf(0f) }
 
@@ -119,34 +118,27 @@ fun Edit(navController: NavHostController, x: MainActivity) {
         mutableStateOf(Color.Red.toArgb())
     }
 
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ),
-                title = {
-                    Text(
-                        "Add Todo",
-                        maxLines = 1,
-                        fontWeight = FontWeight(800),
-                        fontStyle = FontStyle.Italic,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "back"
-                        )
-                    }
-                }
+    Scaffold(topBar = {
+        CenterAlignedTopAppBar(colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            titleContentColor = MaterialTheme.colorScheme.primary,
+        ), title = {
+            Text(
+                "Add Todo",
+                maxLines = 1,
+                fontWeight = FontWeight(800),
+                fontStyle = FontStyle.Italic,
+                overflow = TextOverflow.Ellipsis
             )
-        }
-    )
-    {
+        }, navigationIcon = {
+            IconButton(onClick = { navController.popBackStack() }) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "back"
+                )
+            }
+        })
+    }) {
         it
 
         Card(
@@ -155,17 +147,17 @@ fun Edit(navController: NavHostController, x: MainActivity) {
                 .padding(it),
             shape = MaterialTheme.shapes.medium,
             elevation = CardDefaults.cardElevation(20.dp)
-        )
-        {
-            Column(modifier = Modifier.verticalScroll(rememberScrollState()))
-            {
+        ) {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 OutlinedTextField(
                     shape = RoundedCornerShape(20.dp),
                     value = title,
                     onValueChange = { title = it },
                     label = { Text(text = "Title") },
                     modifier = Modifier
-                        .padding(start = 10.dp, top = 25.dp, end = 10.dp, bottom = 10.dp)
+                        .padding(
+                            start = 10.dp, top = 25.dp, end = 10.dp, bottom = 10.dp
+                        )
                         .wrapContentSize()
                         .fillMaxWidth(),
                     textStyle = TextStyle(fontStyle = FontStyle.Italic, fontSize = 20.sp)
@@ -173,7 +165,9 @@ fun Edit(navController: NavHostController, x: MainActivity) {
 
                 OutlinedTextField(
                     modifier = Modifier
-                        .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 10.dp)
+                        .padding(
+                            start = 10.dp, top = 10.dp, end = 10.dp, bottom = 10.dp
+                        )
                         .wrapContentSize()
                         .fillMaxWidth(),
                     value = note,
@@ -183,36 +177,26 @@ fun Edit(navController: NavHostController, x: MainActivity) {
                 )
 
                 Button(
-                    onClick = { openDialog.value = true },
-                    modifier = Modifier.padding(10.dp)
-                )
-                {
+                    onClick = { openDialog.value = true }, modifier = Modifier.padding(10.dp)
+                ) {
                     Text(text = "Pick Due Date")
                 }
                 if (openDialog.value) {
                     DatePickerDialog(onDismissRequest = {
                         openDialog.value = false
-                    },
-                        confirmButton = {
-                            TextButton(onClick = {
-                                openDialog.value = false
-                            }
-                            )
-                            {
-                                Text("OK")
-                            }
-                        },
-                        dismissButton = {
-                            TextButton(onClick = {
-                                openDialog.value = false
-                            }
-                            )
-                            {
-                                Text("CANCEL")
-                            }
+                    }, confirmButton = {
+                        TextButton(onClick = {
+                            openDialog.value = false
+                        }) {
+                            Text("OK")
                         }
-                    )
-                    {
+                    }, dismissButton = {
+                        TextButton(onClick = {
+                            openDialog.value = false
+                        }) {
+                            Text("CANCEL")
+                        }
+                    }) {
                         DatePicker(
                             state = state
                         )
@@ -229,11 +213,8 @@ fun Edit(navController: NavHostController, x: MainActivity) {
 
                 Column(
                     modifier = Modifier.padding(10.dp)
-                )
-                {
-                    OutlinedButton(onClick = { expandedPriority = true }
-                    )
-                    {
+                ) {
+                    OutlinedButton(onClick = { expandedPriority = true }) {
                         Text("Category : ${selectedItemPriority}")
                     }
                     DropdownMenu(modifier = Modifier.background(
@@ -246,26 +227,20 @@ fun Edit(navController: NavHostController, x: MainActivity) {
                                 selectedItemPriority = item
                                 category = item
                                 expandedPriority = false
-                            }
-                            )
+                            })
                         }
                     }
                 }
 
                 Column(
                     modifier = Modifier.padding(10.dp)
-                )
-                {
-                    OutlinedButton(onClick = { expanded = true }
-                    )
-                    {
+                ) {
+                    OutlinedButton(onClick = { expanded = true }) {
                         Text("Priority : ${selectedItem}")
                     }
                     DropdownMenu(modifier = Modifier.background(
                         color = Color.White, shape = RectangleShape
-                    ),
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false }) {
+                    ), expanded = expanded, onDismissRequest = { expanded = false }) {
                         items.forEach { item ->
                             DropdownMenuItem(text = { Text(text = item) }, onClick = {
                                 selectedItem = item
@@ -278,8 +253,7 @@ fun Edit(navController: NavHostController, x: MainActivity) {
                                     }
                                 }
                                 expanded = false
-                            }
-                            )
+                            })
                         }
                     }
                 }
@@ -308,13 +282,15 @@ fun Edit(navController: NavHostController, x: MainActivity) {
                 }
             }
 
-            ExtendedFloatingActionButton(modifier = Modifier
-                .padding(start = 230.dp, top = 20.dp, bottom = 20.dp),
+            ExtendedFloatingActionButton(modifier = Modifier.padding(
+                    start = 230.dp,
+                    top = 20.dp,
+                    bottom = 20.dp
+                ),
                 text = { Text(text = "Save") },
                 icon = {
                     Icon(
-                        imageVector = Icons.Default.AddCircle,
-                        contentDescription = "saveicon"
+                        imageVector = Icons.Default.AddCircle, contentDescription = "saveicon"
                     )
                 },
                 onClick = {
@@ -337,8 +313,7 @@ fun Edit(navController: NavHostController, x: MainActivity) {
                     if (title.isBlank() or note.isBlank() or date.isBlank()) {
                         Toast.makeText(context, "Enter all fields", Toast.LENGTH_SHORT).show()
                     }
-                }
-            )
+                })
         }
     }
 

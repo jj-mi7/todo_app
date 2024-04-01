@@ -28,8 +28,7 @@ class MainActivity : ComponentActivity() {
                         homeViewModel.setIntentData(sharedText)
                     }
                 }
-                val x = this
-                Navbar(x)
+                Navbar()
 
             }
         }

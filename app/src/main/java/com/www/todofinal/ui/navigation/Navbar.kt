@@ -22,7 +22,7 @@ import com.www.todofinal.ui.screens.UpdateScreen
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun Navbar(x: MainActivity) {
+fun Navbar() {
 
 
     val navController = rememberNavController()
@@ -66,15 +66,15 @@ fun Navbar(x: MainActivity) {
 
         NavHost(navController = navController, startDestination = "home")
         {
-            composable("home") { Home(navController, x) }
+            composable("home") { Home(navController) }
 
-            composable("edit") { Edit(navController, x) }
+            composable("edit") { Edit(navController) }
 
-            composable("completed") { Completed(navController, x) }
+            composable("completed") { Completed(navController) }
 
-            composable("update") { UpdateScreen(navController, x) }
+            composable("update") { UpdateScreen(navController) }
 
-            composable("category") { Category(navController, x) }
+            composable("category") { Category(navController) }
 
         }
     }

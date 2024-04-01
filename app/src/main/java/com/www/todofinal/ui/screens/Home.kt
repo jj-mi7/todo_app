@@ -76,12 +76,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Home(navHostController: NavHostController, x: MainActivity) {
-    val viewModel = ViewModelProvider(x)[HomeViewModel::class.java]
-    val bufferViewModel = ViewModelProvider(x)[AddUpdateViewModel::class.java]
-//    val viewModel :HomeViewModel = viewModel()
-//    val viewModel = viewModel<HomeViewModel>()
-//    val viewModel : HomeViewModel = hiltViewModel()
+fun Home(navHostController: NavHostController) {
+
+    val viewModel: HomeViewModel = hiltViewModel()
+    val bufferViewModel: AddUpdateViewModel = hiltViewModel()
+
     LaunchedEffect(Unit) {
         if (viewModel.getIntentData().isNotBlank()) {
             navHostController.navigate("edit")

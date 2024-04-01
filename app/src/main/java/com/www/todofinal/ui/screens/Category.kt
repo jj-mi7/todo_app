@@ -49,24 +49,27 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import com.www.todofinal.MainActivity
 import com.www.todofinal.data.roomdb.Todo
 import com.www.todofinal.viewModel.AddUpdateViewModel
 import com.www.todofinal.viewModel.CategoryViewModel
+import com.www.todofinal.viewModel.CompletedViewModel
 import kotlinx.coroutines.launch
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Category(navHostController: NavHostController, x: MainActivity) {
-    val viewModel5 = ViewModelProvider(x)[CategoryViewModel::class.java]
-    val bufferViewModel = ViewModelProvider(x)[AddUpdateViewModel::class.java]
+fun Category(navHostController: NavHostController) {
 
-//    val view :HomeViewModel by viewModels()
-//    val list=viewModel.todoAll.observeAsState()
+    val viewModel5: CategoryViewModel = hiltViewModel()
+
+    val bufferViewModel: AddUpdateViewModel = hiltViewModel()
+
+
     var updatedClickedState by rememberSaveable {
         mutableStateOf(false)
     }
