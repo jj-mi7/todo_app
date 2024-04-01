@@ -1,6 +1,5 @@
 package com.www.todofinal.ui.screens
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -40,7 +39,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -57,9 +55,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
-import com.www.todofinal.MainActivity
 import com.www.todofinal.data.roomdb.Todo
 import com.www.todofinal.viewModel.AddUpdateViewModel
 
@@ -87,7 +83,7 @@ fun UpdateScreen(navController: NavHostController) {
         mutableStateOf(viewModel4.getBuffer().dateTime)
     }
 
-    var Check by rememberSaveable {
+    var check by rememberSaveable {
         mutableStateOf(viewModel4.getBuffer().done)
     }
 
@@ -338,7 +334,7 @@ fun UpdateScreen(navController: NavHostController) {
                                 id = viewModel4.getBuffer().id,
                                 title = title,
                                 note = note,
-                                done = Check,
+                                done = check,
                                 dateTime = date,
                                 color = viewModel4.getBuffer().color,
                                 category = category,
