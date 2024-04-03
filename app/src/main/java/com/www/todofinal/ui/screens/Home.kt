@@ -61,16 +61,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.www.todofinal.MainActivity
+import com.www.todofinal.buffer
 import com.www.todofinal.data.roomdb.Todo
-import com.www.todofinal.viewModel.AddUpdateViewModel
+import com.www.todofinal.intentobject
 import com.www.todofinal.viewModel.HomeViewModel
 import kotlinx.coroutines.launch
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -79,10 +75,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 fun Home(navHostController: NavHostController) {
 
     val viewModel: HomeViewModel = hiltViewModel()
-    val bufferViewModel: AddUpdateViewModel = hiltViewModel()
-
     LaunchedEffect(Unit) {
-        if (viewModel.getIntentData().isNotBlank()) {
+        if (intentobject.sharedText.isNotBlank()) {
             navHostController.navigate("edit")
         }
     }
@@ -180,7 +174,7 @@ fun Home(navHostController: NavHostController) {
                                 .padding(5.dp)
                                 .fillMaxSize()
                                 .clickable {
-                                    bufferViewModel.setBuffer(it[item])
+                                    buffer.bufferTodo = it[item]
                                     navHostController.navigate("update")
                                 }) {
                             var priority = when (Color(it[item].priority)) {
