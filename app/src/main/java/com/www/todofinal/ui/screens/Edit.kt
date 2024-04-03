@@ -59,6 +59,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.www.todofinal.data.roomdb.Todo
+import com.www.todofinal.intentobject
 import com.www.todofinal.viewModel.AddUpdateViewModel
 import com.www.todofinal.viewModel.HomeViewModel
 import java.time.Instant
@@ -81,11 +82,10 @@ fun Edit(navController: NavHostController) {
     val context = LocalContext.current
 
     var note by rememberSaveable {
-        mutableStateOf(homeViewModel.getIntentData())
+        mutableStateOf(intentobject.sharedText)
     }
 
-    homeViewModel.setIntentData("")
-
+    intentobject.sharedText = ""
     var title by rememberSaveable {
         mutableStateOf("")
     }
@@ -283,10 +283,10 @@ fun Edit(navController: NavHostController) {
             }
 
             ExtendedFloatingActionButton(modifier = Modifier.padding(
-                    start = 230.dp,
-                    top = 20.dp,
-                    bottom = 20.dp
-                ),
+                start = 230.dp,
+                top = 20.dp,
+                bottom = 20.dp
+            ),
                 text = { Text(text = "Save") },
                 icon = {
                     Icon(
