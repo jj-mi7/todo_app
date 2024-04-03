@@ -50,13 +50,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
-import com.www.todofinal.MainActivity
+import com.www.todofinal.buffer
 import com.www.todofinal.data.roomdb.Todo
 import com.www.todofinal.viewModel.AddUpdateViewModel
 import com.www.todofinal.viewModel.CategoryViewModel
-import com.www.todofinal.viewModel.CompletedViewModel
 import kotlinx.coroutines.launch
 
 
@@ -209,7 +207,7 @@ fun Category(navHostController: NavHostController) {
                                 .padding(5.dp)
                                 .fillMaxSize()
                                 .clickable {
-                                    bufferViewModel.setBuffer(it[item])
+                                    buffer.bufferTodo = it[item]
                                     navHostController.navigate("update")
                                 },
                         )
