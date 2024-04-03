@@ -14,19 +14,7 @@ class AddUpdateViewModel @Inject constructor(
     private val repo: TodoRepo
 ) : ViewModel() {
 
-    private lateinit var todo: Todo
 
-    fun getBuffer(): Todo {
-        return todo
-    }
-
-    fun setBuffer(todoo: Todo) {
-        todo = todoo
-    }
-
-    fun set0Buffer() {
-        todo = Todo(0,"","",false,"",0,"",0f,0)
-    }
     fun addTodo(todo: Todo) {
         viewModelScope.launch(Dispatchers.IO)
         {
